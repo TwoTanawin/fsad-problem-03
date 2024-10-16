@@ -1,0 +1,64 @@
+services:
+  app_db:
+    image: postgres:latest
+    container_name: app_db
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5433:5432"
+    networks:
+      - app_network
+
+  app_pgadmin:
+    image: dpage/pgadmin4
+    container_name: app_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "8081:80"
+    depends_on:
+      - app_db
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - app_network
+
+  app_web:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: app_web
+    image: app_web:0.1
+    command: bash -c "bundle exec rake db:create && bundle exec rake db:migrate && ./bin/rails server -b 0.0.0.0 -p 3000"
+    ports:
+      - "3000:3000"
+    networks:
+      - app_network
+    volumes:
+      - ./backend:/rails
+    depends_on:
+      - app_db
+
+  angular_app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: angular_app
+    image: angular_app:0.1
+    ports:
+      - "4201:4200"
+    networks:
+      - app_network
+    volumes:
+      - ./frontend:/usr/src/app
+    command: ["/bin/sh", "-c", "rm -rf node_modules package-lock.json && npm install && ng serve --host 0.0.0.0 --disable-host-check"]
+
+
+volumes:
+  pgadmin_data:
+
+networks:
+  app_network:
+    external: true
