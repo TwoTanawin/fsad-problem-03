@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  profile_picture: MyString
+  bio: MyText
+  fitness_goals: MyText
+  weight: 9.99
+  height: 9.99
+  age: 1
+  gender: MyString
+  activity_level: MyString
+
+two:
+  user: two
+  profile_picture: MyString
+  bio: MyText
+  fitness_goals: MyText
+  weight: 9.99
+  height: 9.99
+  age: 1
+  gender: MyString
+  activity_level: MyString

@@ -1,0 +1,95 @@
+<div class="flex flex-col w-64 bg-white h-screen shadow-md">
+    <!-- Logo -->
+    <div class="flex items-center h-16 px-4 bg-white shadow">
+      <img
+        class="h-8 w-auto"
+        src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
+        alt="Logo"
+      />
+    </div>
+  
+    <!-- Navigation -->
+    <nav class="flex-1 px-2 py-4 space-y-1 bg-white">
+      <a
+        *ngFor="let item of navigation"
+        [href]="item.href"
+        [ngClass]="classNames(
+          item.current ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+          'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
+        )"
+      >
+        <!-- Icons (using Heroicons SVGs) -->
+        <svg
+          *ngIf="item.icon === 'home'"
+          xmlns="http://www.w3.org/2000/svg"
+          class="mr-3 h-6 w-6 text-indigo-500 group-hover:text-indigo-600"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 3.293l6 6V18a1 1 0 01-1 1h-4v-4H9v4H5a1 1 0 01-1-1V9.293l6-6zM5 10v7h2v-3a1 1 0 011-1h4a1 1 0 011 1v3h2v-7l-5-5-5 5z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <svg
+          *ngIf="item.icon === 'users'"
+          xmlns="http://www.w3.org/2000/svg"
+          class="mr-3 h-6 w-6 text-gray-400 group-hover:text-gray-500"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            d="M13 7a3 3 0 11-6 0 3 3 0 016 0zM5 8a4 4 0 10-4 4h1a3 3 0 016 0h1a4 4 0 00-4-4H5zM9 13a4 4 0 100 8h2a4 4 0 100-8H9z"
+          />
+        </svg>
+        <span>{{ item.name }}</span>
+      </a>
+  
+      <!-- Teams Section -->
+      <div class="mt-6">
+        <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+          Your Teams
+        </h3>
+        <div class="mt-1 space-y-1">
+          <a
+            *ngFor="let team of teams"
+            href="#"
+            class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md"
+          >
+            <span
+              class="flex-shrink-0 h-6 w-6 rounded-full bg-gray-200 text-gray-500 text-xs flex items-center justify-center"
+              >{{ team.initial }}</span
+            >
+            <span class="ml-3">{{ team.name }}</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  
+    <!-- Settings -->
+    <div class="flex-shrink-0 px-4 py-4">
+      <a
+        href="#"
+        class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="mr-3 h-6 w-6 text-gray-400"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="3"></circle>
+          <path
+            d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83l-2.83 2.83a2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51v.11A2 2 0 019 22H7a2 2 0 01-2-2v-1.18a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0L.17 17.85a2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82V9a1.65 1.65 0 00-.33-1.82L.17 6.06a2 2 0 010-2.83L3 1.41a2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33h.11A1.65 1.65 0 009 3V1a2 2 0 012-2h1.18a2 2 0 012 2v1.18a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0l2.83 2.83a2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v.11A1.65 1.65 0 0019 9v6z"
+          ></path>
+        </svg>
+        Settings
+      </a>
+    </div>
+  </div>
+  
