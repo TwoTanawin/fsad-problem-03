@@ -14,7 +14,9 @@
   </div>
 </div>
 
-<!-- Full-frame sign-in page -->
+<!-- Full-frame sign-in/register page -->
 <div *ngIf="isSignInPage()">
-  <router-outlet></router-outlet>
+  <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <router-outlet></router-outlet>
+  </div>
 </div>

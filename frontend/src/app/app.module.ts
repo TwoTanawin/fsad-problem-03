@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { PostInteractionComponent } from './components/post-interaction/post-interaction.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { RegisterComponent } from './components/register/register.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +26,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     PostCardComponent,
     PostInteractionComponent,
     SignInComponent,
-    ProfileComponent
+    ProfileComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

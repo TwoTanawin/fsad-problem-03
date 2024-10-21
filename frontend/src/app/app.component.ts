@@ -12,6 +12,6 @@ export class AppComponent {
   
   title = 'frontend';
   isSignInPage(): boolean {
-    return this.router.url === '/signin';
+    return this.router.url === '/signin' || this.router.url === '/register';
   }
 }
