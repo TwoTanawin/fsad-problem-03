@@ -5,8 +5,7 @@
         <!-- Left Section: Icon -->
         <div class="flex items-center space-x-4">
           <!-- Your icon (SVG or Image) -->
-          <a href="#" class="text-indigo-600">
-            <!-- Example SVG icon -->
+          <a routerLink="/" class="text-indigo-600"> <!-- Link to the homepage -->
             <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8V5a1 1 0 012 0v5a1 1 0 01-2 0zm1 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clip-rule="evenodd" />
             </svg>
@@ -69,9 +68,9 @@
               aria-orientation="vertical"
               aria-labelledby="user-menu"
             >
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Your Profile</a>
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
+              <a routerLink="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Your Profile</a>
+              <a routerLink="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
+              <a routerLink="/signout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
             </div>
           </div>
         </div>

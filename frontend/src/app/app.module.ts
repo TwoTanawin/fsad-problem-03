@@ -14,6 +14,8 @@ import { UserPostComponent } from './components/user-post/user-post.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { FormsModule } from '@angular/forms';
 import { PostInteractionComponent } from './components/post-interaction/post-interaction.component';
+import { SignInComponent } from './components/sign-in/sign-in.component';
+import { ProfileComponent } from './components/profile/profile.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,7 +23,9 @@ import { PostInteractionComponent } from './components/post-interaction/post-int
     SidebarComponent,
     UserPostComponent,
     PostCardComponent,
-    PostInteractionComponent
+    PostInteractionComponent,
+    SignInComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

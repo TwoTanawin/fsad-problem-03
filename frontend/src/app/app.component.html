@@ -1,16 +1,20 @@
-<!-- Navigation Bar -->
-<app-navbar></app-navbar>
+<!-- Conditionally display navbar and sidebar -->
+<div *ngIf="!isSignInPage()">
+  <!-- Navigation Bar -->
+  <app-navbar></app-navbar>
 
-<div class="flex">
-  <!-- Sidebar -->
-  <app-sidebar></app-sidebar>
+  <div class="flex">
+    <!-- Sidebar -->
+    <app-sidebar></app-sidebar>
 
-  <!-- Main Content Area (with the new user-post component) -->
-  <div class="flex-grow p-6">
-    <!-- Add the user-post component here -->
-    <app-user-post></app-user-post>
-
-    <!-- You can also include router outlet to dynamically load other routes here -->
-    <router-outlet></router-outlet>
+    <!-- Main Content Area -->
+    <div class="flex-grow p-6">
+      <router-outlet></router-outlet>
+    </div>
   </div>
+</div>
+
+<!-- Full-frame sign-in page -->
+<div *ngIf="isSignInPage()">
+  <router-outlet></router-outlet>
 </div>
