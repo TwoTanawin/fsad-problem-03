@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { UserProfileService } from '../../services/user-profile.service';  // Import your service
+import { Component, OnInit } from '@angular/core';
+import { UserProfileService } from '../../services/user-profile.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,10 +7,10 @@ import { Router } from '@angular/router';
   templateUrl: './create-profile.component.html',
   styleUrls: ['./create-profile.component.scss']
 })
-export class CreateProfileComponent {
-  selectedImage: string | ArrayBuffer | null = null;  // Add this property
+export class CreateProfileComponent implements OnInit {
+  selectedImage: string | ArrayBuffer | null = null;
 
-  profile = {  // Add this object to hold profile details
+  profile = {
     username: '',
     bio: '',
     fitnessGoals: '',
@@ -23,9 +23,23 @@ export class CreateProfileComponent {
   };
 
   constructor(
-    private userProfileService: UserProfileService,  // Inject the user profile service
-    private router: Router  // Inject the router
+    private userProfileService: UserProfileService,
+    private router: Router
   ) {}
+
+  ngOnInit(): void {
+    this.userProfileService.getUserData().subscribe({
+      next: (user) => {
+        this.profile.username = user.username; // Automatically fill in the username
+        this.profile.email = user.email;       // Automatically fill in the email
+      },
+      error: (error) => {
+        console.error('Error fetching user data:', error);
+        alert('Failed to fetch user data');
+      }
+    });
+  }
+  
 
   // Method to handle image selection from file input
   onImageSelected(event: any) {
@@ -41,18 +55,18 @@ export class CreateProfileComponent {
 
   // Method to handle cancelling profile creation
   cancelEdit() {
-    this.router.navigate(['/posts']);  // Example: Redirect to posts page
+    this.router.navigate(['/posts']);  // Redirect to posts page
   }
 
   // Method to save profile data
   saveProfile() {
     if (!this.selectedImage) {
-      this.selectedImage = '/assets/images/brocode.png';  // Use default image if no image is selected
+      this.selectedImage = '/assets/images/brocode.png';  // Use default image if none selected
     }
 
     const profileData = {
       ...this.profile,
-      profile_picture: this.selectedImage  // Include selected image
+      profile_picture: this.selectedImage
     };
 
     this.userProfileService.createUserProfile(profileData).subscribe({

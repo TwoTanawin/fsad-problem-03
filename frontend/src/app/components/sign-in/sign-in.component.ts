@@ -32,6 +32,8 @@ export class SignInComponent {
         // Store the token for future use in API requests
         localStorage.setItem('token', response.token);
 
+        console.log(response.token)
+
         // Check if the user has already created a profile
         this.checkUserProfile();
       },

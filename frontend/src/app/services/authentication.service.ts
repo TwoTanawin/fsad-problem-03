@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -25,5 +25,15 @@ export class AuthService {
   // Define the login method
   login(userData: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/login`, userData);
+  }
+
+  // Method to get the logged-in user's info (username and email)
+  getUserInfo(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get(`${this.baseUrl}/user_info`, { headers });
   }
 }
