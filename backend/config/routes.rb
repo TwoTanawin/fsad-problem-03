@@ -10,4 +10,6 @@ Rails.application.routes.draw do
 
   post "signup", to: "authentication#signup"
   post "login", to: "authentication#login"
+
+  resources :user_profiles, only: [ :create, :show, :update, :destroy ]
 end
