@@ -8,4 +8,5 @@ class UserProfile < ApplicationRecord
   validates :weight, numericality: { greater_than: 0 }, allow_nil: true
   validates :height, numericality: { greater_than: 0 }, allow_nil: true
   validates :gender, inclusion: { in: %w[male female other] }, allow_nil: true
+  validates :user_id, uniqueness: true
 end

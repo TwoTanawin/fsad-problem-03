@@ -36,4 +36,13 @@ export class AuthService {
 
     return this.http.get(`${this.baseUrl}/user_info`, { headers });
   }
+
+  // Method to fetch user profile by email and token
+  getUserProfileByEmail(email: string, token: string): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    // Make the GET request with the email and authorization token
+    return this.http.get<any>(`${this.baseUrl}/user_profiles?email=${email}`, { headers });
+  }
+
 }

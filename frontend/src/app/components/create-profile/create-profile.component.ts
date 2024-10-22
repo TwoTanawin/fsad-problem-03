@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserProfileService } from '../../services/user-profile.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/authentication.service';  // Updated import path
 
 @Component({
   selector: 'app-create-profile',
@@ -19,27 +20,33 @@ export class CreateProfileComponent implements OnInit {
     weight: null,
     height: null,
     email: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    activityLevel: ''  // Add the missing field
   };
+
+  userId: number | null = null;  // Variable to store the userId
 
   constructor(
     private userProfileService: UserProfileService,
+    private authService: AuthService,  // Use the updated AuthService
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    // Fetch user data and populate profile
-    this.userProfileService.getUserData().subscribe({
+    this.authService.getUserInfo().subscribe({
       next: (user) => {
+        this.userId = user.id;
+        console.log('User ID:', this.userId);  // Debugging log to ensure userId is correct
         this.profile.username = user.username;
         this.profile.email = user.email;
       },
       error: (error) => {
-        console.error('Error fetching user data:', error);
-        alert('Failed to fetch user data');
+        console.error('Error fetching user info:', error);
+        alert('Failed to fetch user info');
       }
     });
   }
+  
 
   // Method to handle image selection and Base64 encoding
   onImageSelected(event: any) {
@@ -54,11 +61,9 @@ export class CreateProfileComponent implements OnInit {
     }
   }
 
-
   saveProfile() {
     console.log('Current profile data:', this.profile);
   
-    // Ensure required fields are filled
     if (!this.profile.username || !this.profile.email || this.profile.age == null ||
         this.profile.weight == null || this.profile.height == null || !this.profile.gender) {
       alert('Please fill in all required fields.');
@@ -67,27 +72,29 @@ export class CreateProfileComponent implements OnInit {
   
     const profileData = {
       ...this.profile,
-      user_id: 1, // Replace with the actual user ID from your authentication service
+      user_id: this.userId,  // Ensure userId is correctly set
       profile_picture: this.selectedImage || '/assets/images/brocode.png',
-      gender: this.profile.gender.toLowerCase() // Ensure gender is lowercase
+      gender: this.profile.gender.toLowerCase(),
+      activity_level: this.profile.activityLevel || 'default'
     };
   
-    // Call the profile creation service
+    console.log('Profile Data being sent:', profileData);  // Log to ensure user_id is present
+  
     this.userProfileService.createUserProfile(profileData).subscribe({
       next: (response: any) => {
         console.log('Profile created successfully:', response);
-        this.router.navigate(['/posts']); // Navigate to the posts page after success
+        this.router.navigate(['/posts']);
       },
       error: (error: any) => {
         console.error('Error creating profile:', error);
-        alert('Failed to create profile: ' + error.error.message); // Show specific error message
+        alert(`Failed to create profile: ${error.error.message || 'Unknown error'}`);
       }
     });
   }
   
 
-
   cancelEdit() {
     this.router.navigate(['/posts']);
   }
 }
+

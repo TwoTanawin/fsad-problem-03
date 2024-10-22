@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   post "signup", to: "authentication#signup"
   post "login", to: "authentication#login"
   get "user_info", to: "authentication#user_info"
-  get "user_profiles/:id", to: "user_profiles#show"
+  get "user_profiles", to: "user_profiles#show"
 
-  resources :user_profiles, only: [ :create, :show, :update, :destroy ]
+  resources :user_profiles, only: [ :index, :create, :show, :update, :destroy ]
 end

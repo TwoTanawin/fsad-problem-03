@@ -1,13 +1,34 @@
 class UserProfilesController < ApplicationController
-  before_action :set_user_profile, only: %i[show update destroy]
+  before_action :authorize_request # Assuming you have this method to set @current_user
+  before_action :set_user_profile, only: %i[update destroy]
 
-  # GET /user_profiles/:id
-  def show
-    render json: @user_profile
+  def index
+    if params[:email]
+      user = User.find_by(email: params[:email])
+      if user && user.user_profile
+        render json: user.user_profile, status: :ok
+      else
+        render json: { error: "Profile not found" }, status: :not_found
+      end
+    else
+      render json: { error: "Email not provided" }, status: :unprocessable_entity
+    end
   end
 
+  # GET /user_profiles
+  def show
+    user = User.find_by(email: params[:email])
+    if user && user.user_profile
+      render json: user.user_profile, status: :ok
+    else
+      render json: { error: "Profile not found" }, status: :not_found
+    end
+  end
+
+
+  # POST /user_profiles
   def create
-    @user_profile = UserProfile.new(user_profile_params)
+    @user_profile = @current_user.build_profile(user_profile_params)  # Associate the profile with the current user
 
     if params[:user_profile][:profile_picture].present?
       @user_profile.profile_picture = params[:user_profile][:profile_picture] # Handle base64 image
@@ -20,8 +41,6 @@ class UserProfilesController < ApplicationController
       render json: { error: @user_profile.errors.full_messages }, status: :unprocessable_entity
     end
   end
-
-
 
   # PATCH/PUT /user_profiles/:id
   def update
@@ -40,10 +59,10 @@ class UserProfilesController < ApplicationController
   private
 
   def set_user_profile
-    @user_profile = UserProfile.find(params[:id])
+    @user_profile = @current_user.profile # Fetch the profile associated with the current user
   end
 
   def user_profile_params
-    params.require(:user_profile).permit(:user_id, :profile_picture, :bio, :fitness_goals, :weight, :height, :age, :gender, :activity_level)
+    params.require(:user_profile).permit(:profile_picture, :bio, :fitness_goals, :weight, :height, :age, :gender, :activity_level)
   end
 end
