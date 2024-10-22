@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
 
-  private baseUrl = 'http://localhost:3000/signup';  // Your Rails backend signup endpoint
+  private baseUrl = 'http://localhost:3000';  // Base URL for your API
 
   constructor(private http: HttpClient) { }
 
@@ -19,7 +19,11 @@ export class AuthService {
         password: user.password
       }
     };
-  
-    return this.http.post<any>(this.baseUrl, payload);
-  }  
+    return this.http.post<any>(`${this.baseUrl}/signup`, payload);
+  }
+
+  // Define the login method
+  login(userData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/login`, userData);
+  }
 }
