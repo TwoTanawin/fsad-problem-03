@@ -1,4 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { AuthService } from '../../services/authentication.service'; // Service to fetch current user data
+import { UserProfileService } from '../../services/user-profile.service'; // Service to fetch user profile data
 
 interface Comment {
   commenterName: string;
@@ -10,7 +12,7 @@ interface Comment {
   selector: 'app-post-interaction',
   templateUrl: './post-interaction.component.html',
 })
-export class PostInteractionComponent {
+export class PostInteractionComponent implements OnInit {
   @Input() postContent: string = '';
   @Input() postImage: string = ''; // Optional post image
   @Input() postOwner: string = '';
@@ -20,19 +22,43 @@ export class PostInteractionComponent {
   isEditing = false;
   comments: Comment[] = [];
   newCommentText: string = '';
-  userProfileImage: string = 'https://randomuser.me/api/portraits/men/33.jpg'; // Simulated logged-in user image
-  userName: string = 'John Doe'; // Simulated logged-in user name
+
+  // User Profile Information
+  userProfileImage: string = ''; // To be dynamically set
+  userName: string = ''; // To be dynamically set
 
   @Output() deletePost = new EventEmitter<void>();
   @Output() pinPost = new EventEmitter<void>();
 
-  toggleEdit() {
-    this.isEditing = !this.isEditing;
+  constructor(private authService: AuthService, private userProfileService: UserProfileService) {}
+
+  ngOnInit(): void {
+    this.loadUserProfile(); // Fetch current user data on initialization
   }
 
-  saveEdit(updatedContent: string) {
-    this.postContent = updatedContent;
-    this.isEditing = false;
+  // Fetch current user information
+  loadUserProfile(): void {
+    this.authService.getUserInfo().subscribe({
+      next: (user) => {
+        this.userName = user.username; // Set the logged-in user's name
+      },
+      error: (error) => {
+        console.error('Error fetching user info:', error);
+      }
+    });
+
+    this.userProfileService.getUserProfile().subscribe({
+      next: (profile) => {
+        this.userProfileImage = this.decodeBase64Image(profile.profile_picture); // Set logged-in user's profile picture
+      },
+      error: (error) => {
+        console.error('Failed to fetch profile:', error);
+      }
+    });
+  }
+
+  decodeBase64Image(base64String: string): string {
+    return `data:image/png;base64,${base64String}`;
   }
 
   // Adding a new comment
@@ -46,6 +72,15 @@ export class PostInteractionComponent {
       this.comments.push(newComment);
       this.newCommentText = ''; // Reset comment input
     }
+  }
+
+  toggleEdit() {
+    this.isEditing = !this.isEditing;
+  }
+
+  saveEdit(updatedContent: string) {
+    this.postContent = updatedContent;
+    this.isEditing = false;
   }
 
   likePost() {

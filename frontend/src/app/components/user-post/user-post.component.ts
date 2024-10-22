@@ -114,9 +114,10 @@ export class UserPostComponent implements OnInit {
         profileImage: this.userProfileImage, // Use current user's profile image
         text: this.newCommentContent, // Use the comment text entered by the user
       };
-
+  
       this.posts[postIndex].comments.push(comment); // Add the comment to the post's comments array
       this.newCommentContent = ''; // Reset the comment input
     }
   }
+  
 }

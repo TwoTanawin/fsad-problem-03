@@ -15,7 +15,7 @@
     <!-- Post Content -->
     <div *ngIf="!isEditing" class="mt-4">
       <p class="text-gray-700">{{ postContent }}</p>
-      
+  
       <!-- Conditionally render the image if it exists -->
       <img *ngIf="postImage" class="mt-2 rounded-lg" [src]="postImage" alt="Post Image" />
     </div>
