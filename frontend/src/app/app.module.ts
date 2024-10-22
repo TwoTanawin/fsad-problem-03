@@ -11,25 +11,27 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UserPostComponent } from './components/user-post/user-post.component';
-import { PostCardComponent } from './components/post-card/post-card.component';
+// import { PostCardComponent } from './components/post-card/post-card.component';
 import { FormsModule } from '@angular/forms';
 import { PostInteractionComponent } from './components/post-interaction/post-interaction.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CreateProfileComponent } from './components/create-profile/create-profile.component';
+import { FooterComponent } from './components/footer/footer.component';
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     SidebarComponent,
     UserPostComponent,
-    PostCardComponent,
+    // PostCardComponent,
     PostInteractionComponent,
     SignInComponent,
     ProfileComponent,
     RegisterComponent,
-    CreateProfileComponent
+    CreateProfileComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

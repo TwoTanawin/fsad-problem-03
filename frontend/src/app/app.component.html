@@ -3,20 +3,31 @@
   <!-- Navigation Bar -->
   <app-navbar></app-navbar>
 
-  <div class="flex">
-    <!-- Sidebar -->
-    <app-sidebar></app-sidebar>
+  <div class="flex flex-col min-h-screen">
+    <!-- Main content and sidebar -->
+    <div class="flex flex-grow">
+      <!-- Sidebar -->
+      <app-sidebar></app-sidebar>
 
-    <!-- Main Content Area -->
-    <div class="flex-grow p-6">
-      <router-outlet></router-outlet>
+      <!-- Main Content Area -->
+      <div class="flex-grow p-6">
+        <router-outlet></router-outlet>
+      </div>
     </div>
+
+    <!-- Footer -->
+    <app-footer></app-footer>
   </div>
 </div>
 
 <!-- Full-frame sign-in/register page -->
 <div *ngIf="isSignInPage()">
-  <div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <router-outlet></router-outlet>
+  <div class="min-h-screen flex flex-col">
+    <div class="flex-grow flex items-center justify-center bg-gray-100">
+      <router-outlet></router-outlet>
+    </div>
+
+    <!-- Footer for the sign-in/register page -->
+    <app-footer></app-footer>
   </div>
 </div>
