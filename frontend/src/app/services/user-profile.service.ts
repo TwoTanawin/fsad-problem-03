@@ -22,13 +22,14 @@ export class UserProfileService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  // Fetch user profile
-  getUserProfile(): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.get(this.apiUrl, { headers }).pipe(
-      catchError(err => throwError(err))
-    );
-  }
+    // Fetch current user's profile based on the token
+    getUserProfile(): Observable<any> {
+      const headers = this.getAuthHeaders();
+      return this.http.get(this.apiUrl, { headers }).pipe(
+        catchError(err => throwError(err))
+      );
+    }
+
 
   // Method to fetch user profile by email and token
   getUserProfileByEmail(email: string, token: string): Observable<any> {
