@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { UserProfileService } from '../../services/user-profile.service'; 
-import { AuthService } from '../../services/authentication.service'; 
+import { UserProfileService } from '../../services/user-profile.service';
+import { AuthService } from '../../services/authentication.service';
+import { PostService } from '../../services/post-service.service';
 
 interface Post {
   content: string;
   owner: string;
   profileImage: string;
-  image?: string | null; 
+  image?: string | null;
   timestamp: string;
-  comments: Comment[]; // Array to hold comments
+  comments: Comment[];
 }
 
 interface Comment {
@@ -25,30 +26,34 @@ export class UserPostComponent implements OnInit {
   isExpanded = false;
   newPostContent = '';
   newPostImage: string | null = null;
-  posts: Post[] = [];
+  posts: Post[] = []; // Initialize posts as an empty array
   newCommentContent = '';
 
-  // User Profile Info
-  userProfileImage = 'https://randomuser.me/api/portraits/men/32.jpg'; // Default profile picture
+  userProfileImage = 'https://randomuser.me/api/portraits/men/32.jpg';
   userName = 'Loading...';
+  token: string = ''; // Store user token here
 
   constructor(
-    private userProfileService: UserProfileService, 
-    private authService: AuthService  
+    private userProfileService: UserProfileService,
+    private authService: AuthService,
+    private postService: PostService // Inject PostService
   ) {}
 
   ngOnInit(): void {
-    this.fetchUserProfile(); 
+    this.fetchUserProfile(); // Fetch user profile, including profile image
+  
     this.authService.getUserInfo().subscribe({
       next: (user) => {
-        this.userName = user.username;  
+        this.userName = user.username;  // Store username
+        this.token = user.token;        // Store user token
+        this.loadPosts();               // Load posts after fetching user info
       },
       error: (error) => {
         console.error('Error fetching user info:', error);
       }
     });
   }
-
+  
   fetchUserProfile() {
     this.userProfileService.getUserProfile().subscribe({
       next: (profileData) => {
@@ -61,27 +66,72 @@ export class UserPostComponent implements OnInit {
       }
     });
   }
-
+  
   decodeBase64Image(base64String: string): string {
     return `data:image/png;base64,${base64String}`;
   }
 
-  // Create a new post
+  // Create a new post using the post service
   createPost() {
-    const newPost: Post = {
-      content: this.newPostContent,
-      owner: this.userName,
-      profileImage: this.userProfileImage,
-      image: this.newPostImage, 
-      timestamp: new Date().toLocaleString(),
-      comments: [] 
+    if (!this.newPostContent && !this.newPostImage) {
+      console.error('Cannot create post without a caption or image.');
+      return;
+    }
+
+    const postData = {
+      caption: this.newPostContent,
+      image_base64: this.newPostImage, // Optional, only include if image is uploaded
+      pinned: false,
+      category: 'general',
     };
 
-    this.posts.unshift(newPost); // Add the new post to the top of the list
-    this.newPostContent = ''; // Reset post content
-    this.newPostImage = null; // Reset post image
-    this.isExpanded = false; // Close the post creation modal
+    this.postService.createPost(postData).subscribe({
+      next: (response) => {
+        const newPost: Post = {
+          content: response.caption,
+          owner: this.userName,
+          profileImage: this.userProfileImage,
+          image: response.image_base64 ? this.decodeBase64Image(response.image_base64) : null,
+          timestamp: new Date().toLocaleString(),
+          comments: [],
+        };
+
+        this.posts.unshift(newPost); // Add the new post to the top of the list
+        this.newPostContent = ''; // Reset post content
+        this.newPostImage = null;  // Reset post image
+        this.isExpanded = false; // Close the post creation modal
+      },
+      error: (error) => {
+        console.error('Failed to create post:', error);
+      },
+    });
   }
+
+  loadPosts() {
+    this.postService.getAllPosts().subscribe({
+      next: (posts: any) => {
+        this.posts = posts
+          .map((post: any) => ({
+            content: post.caption,
+            owner: post.user.username,
+            // Fetch profile picture from user_profile, decode it if in Base64
+            profileImage: post.user.user_profile?.profile_picture
+              ? this.decodeBase64Image(post.user.user_profile.profile_picture)
+              : '/assets/images/default-profile.png',  // Default profile picture
+            image: post.image_base64 ? this.decodeBase64Image(post.image_base64) : null,
+            timestamp: post.created_at,
+            comments: post.comments,
+          }))
+          // Sort posts by created_at timestamp in descending order (newest first)
+          .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      },
+      error: (error: any) => {
+        console.error('Failed to load posts:', error);
+      },
+    });
+  }
+  
+  
 
   // Handle image selection and convert it to base64
   onImageSelected(event: any) {
@@ -106,18 +156,19 @@ export class UserPostComponent implements OnInit {
     this.posts.unshift(pinnedPost); // Add it to the top of the list
   }
 
+  
+
   // Add a comment to a specific post
   addComment(postIndex: number) {
     if (this.newCommentContent.trim()) {
       const comment: Comment = {
-        username: this.userName, // Use current user's name
-        profileImage: this.userProfileImage, // Use current user's profile image
-        text: this.newCommentContent, // Use the comment text entered by the user
+        username: this.userName,
+        profileImage: this.userProfileImage,
+        text: this.newCommentContent,
       };
-  
-      this.posts[postIndex].comments.push(comment); // Add the comment to the post's comments array
-      this.newCommentContent = ''; // Reset the comment input
+
+      this.posts[postIndex].comments.push(comment);
+      this.newCommentContent = '';
     }
   }
-  
 }
