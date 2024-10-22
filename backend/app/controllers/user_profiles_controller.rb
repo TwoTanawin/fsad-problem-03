@@ -2,29 +2,14 @@ class UserProfilesController < ApplicationController
   before_action :authorize_request # Assuming you have this method to set @current_user
   before_action :set_user_profile, only: %i[update destroy]
 
-  def index
-    if params[:email]
-      user = User.find_by(email: params[:email])
-      if user && user.user_profile
-        render json: user.user_profile, status: :ok
-      else
-        render json: { error: "Profile not found" }, status: :not_found
-      end
-    else
-      render json: { error: "Email not provided" }, status: :unprocessable_entity
-    end
-  end
-
-  # GET /user_profiles
+  # GET /user_profiles (for the current user)
   def show
-    user = User.find_by(email: params[:email])
-    if user && user.user_profile
-      render json: user.user_profile, status: :ok
+    if @current_user && @current_user.user_profile
+      render json: @current_user.user_profile, status: :ok
     else
       render json: { error: "Profile not found" }, status: :not_found
     end
   end
-
 
   # POST /user_profiles
   def create
@@ -59,7 +44,7 @@ class UserProfilesController < ApplicationController
   private
 
   def set_user_profile
-    @user_profile = @current_user.profile # Fetch the profile associated with the current user
+    @user_profile = @current_user.user_profile # Fetch the profile associated with the current user
   end
 
   def user_profile_params
