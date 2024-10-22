@@ -5,7 +5,7 @@
       <div class="flex-1">
         <input
           type="text"
-          placeholder="What's on your mind, Tanawin?"
+          [placeholder]="'What\'s on your mind, ' + userName + '?'"
           class="w-full px-4 py-2 bg-gray-100 rounded-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           (click)="isExpanded = true"
         />
@@ -26,7 +26,8 @@
       </div>
   
       <!-- Post Content Input -->
-      <textarea [(ngModel)]="newPostContent" rows="3" placeholder="What's on your mind, Tanawin?" class="w-full px-4 py-2 bg-gray-100 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+      <textarea [(ngModel)]="newPostContent" rows="3" [placeholder]="'What\'s on your mind, ' + userName + '?'"
+        class="w-full px-4 py-2 bg-gray-100 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
   
       <!-- Image Upload Section -->
       <div class="mt-4">
@@ -45,16 +46,54 @@
     </div>
   </div>
   
-  <!-- Render Posts -->
-  <div *ngFor="let post of posts; let i = index">
-    <app-post-interaction
-      [postContent]="post.content"
-      [postImage]="post.image || ''"
-      [postOwner]="post.owner"
-      [profileImage]="post.profileImage"
-      [timestamp]="post.timestamp"
-      (deletePost)="deletePost(i)"
-      (pinPost)="pinPost(i)"
-    ></app-post-interaction>
+<!-- Render Posts -->
+<div *ngFor="let post of posts; let i = index" class="max-w-xl mx-auto bg-white rounded-lg shadow-md p-4 mb-4 mt-4">
+    <!-- Post Header with Profile Image and User Info -->
+    <div class="flex justify-between items-center">
+      <div class="flex items-center space-x-4">
+        <img class="h-10 w-10 rounded-full" [src]="post.profileImage" alt="Profile Picture" />
+        <div>
+          <h4 class="font-bold text-gray-800">{{ post.owner }}</h4>
+          <p class="text-sm text-gray-600">{{ post.timestamp }}</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button (click)="pinPost(i)" class="text-sm text-gray-500 hover:text-blue-500">Pin</button>
+        <button (click)="deletePost(i)" class="text-sm text-red-500 hover:text-red-600">Delete</button>
+      </div>
+    </div>
+  
+    <!-- Post Content (with margin added) -->
+    <p class="mt-4 text-gray-800">{{ post.content }}</p> <!-- Added margin-top (mt-4) -->
+    
+    <div *ngIf="post.image" class="mt-2">
+      <img [src]="post.image" class="rounded-lg w-full h-64 object-cover" alt="Post Image" />
+    </div>
+  
+    <!-- Post Actions -->
+    <div class="flex space-x-4 mt-4 text-sm text-gray-500">
+      <button class="hover:text-blue-500">Like</button>
+      <button class="hover:text-blue-500">Edit</button>
+      <button class="hover:text-blue-500">Share</button>
+    </div>
+  
+    <!-- Comments Section -->
+    <div class="mt-4">
+      <div *ngFor="let comment of post.comments" class="flex items-start space-x-2 mb-2">
+        <img class="h-8 w-8 rounded-full" [src]="comment.profileImage" alt="Commenter Image" />
+        <div>
+          <h5 class="font-bold text-sm">{{ comment.username }}</h5>
+          <p class="text-sm">{{ comment.text }}</p>
+        </div>
+      </div>
+  
+      <!-- Comment Input -->
+      <div class="mt-4 flex items-center space-x-4">
+        <img class="h-8 w-8 rounded-full" [src]="userProfileImage" alt="Profile Image" />
+        <input [(ngModel)]="newCommentContent" placeholder="Write a comment..." class="flex-1 px-4 py-2 border border-gray-300 rounded-full">
+        <button (click)="addComment(i)" class="bg-blue-500 text-white px-4 py-1 rounded-full">Post</button>
+      </div>
+    </div>
   </div>
+  
   
