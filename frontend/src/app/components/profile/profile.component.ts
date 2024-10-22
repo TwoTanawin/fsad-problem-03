@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserProfileService } from '../../services/user-profile.service';
+import { AuthService } from '../../services/authentication.service';  // Add AuthService import
 
 @Component({
   selector: 'app-profile',
@@ -9,22 +10,39 @@ import { UserProfileService } from '../../services/user-profile.service';
 export class ProfileComponent implements OnInit {
   isEditing = false;
 
-  // Profile data
+  // Declare profile data properties
   profilePicture: string = 'https://flowbite.com/application-ui/demo/images/users/jese-leos-2x.png'; 
-  username: string = '';
-  bio: string = '';
-  fitnessGoals: string = '';
+  username: string = '';  // Declare the username property
+  bio: string = '';       // Declare the bio property
+  fitnessGoals: string = ''; // Declare the fitnessGoals property
   weight: number = 0;
   height: number = 0;
   age: number = 0;
   gender: string = '';
-  email: string = '';
+  email: string = '';      // Declare the email property
   phoneNumber: string = '';
 
-  constructor(private userProfileService: UserProfileService) {}  // Inject UserProfileService
+  userId: number | null = null;  // Variable to store the userId
+
+  constructor(
+    private userProfileService: UserProfileService, 
+    private authService: AuthService  // Inject AuthService to get user info
+  ) {}
 
   ngOnInit(): void {
     this.fetchUserProfile();
+    this.authService.getUserInfo().subscribe({
+      next: (user) => {
+        this.userId = user.id;
+        console.log('User ID:', this.userId);  // Debugging log to ensure userId is correct
+        this.username = user.username;  // Set the username from the backend
+        this.email = user.email;        // Set the email from the backend
+      },
+      error: (error) => {
+        console.error('Error fetching user info:', error);
+        alert('Failed to fetch user info');
+      }
+    });
   }
 
   // Method to fetch profile data using the service for the current user
@@ -42,15 +60,13 @@ export class ProfileComponent implements OnInit {
   // Method to update the component's profile data with the fetched data
   updateProfileData(profileData: any) {
     this.profilePicture = this.decodeBase64Image(profileData.profile_picture);
-    this.username = profileData.username || '';  // Use empty string as fallback
     this.bio = profileData.bio || '';
     this.fitnessGoals = profileData.fitness_goals || '';
     this.weight = profileData.weight || 0;
     this.height = profileData.height || 0;
     this.age = profileData.age || 0;
     this.gender = profileData.gender || '';
-    this.email = profileData.email || '';
-    this.phoneNumber = profileData.phone_number || '';  // Adjust based on actual backend response
+    this.phoneNumber = profileData.phone_number || '';
   }
 
   // Method to decode Base64 image

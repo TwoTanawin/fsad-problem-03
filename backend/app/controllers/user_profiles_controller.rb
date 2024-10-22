@@ -2,7 +2,16 @@ class UserProfilesController < ApplicationController
   before_action :authorize_request # Assuming you have this method to set @current_user
   before_action :set_user_profile, only: %i[update destroy]
 
-  # GET /user_profiles (for the current user)
+  def index
+    if @current_user && @current_user.user_profile
+      render json: @current_user.user_profile, status: :ok
+    else
+      render json: { error: "Profile not found" }, status: :not_found
+    end
+  end
+
+
+  # GET /user_profiles
   def show
     if @current_user && @current_user.user_profile
       render json: @current_user.user_profile, status: :ok
@@ -10,6 +19,7 @@ class UserProfilesController < ApplicationController
       render json: { error: "Profile not found" }, status: :not_found
     end
   end
+
 
   # POST /user_profiles
   def create
@@ -44,8 +54,12 @@ class UserProfilesController < ApplicationController
   private
 
   def set_user_profile
-    @user_profile = @current_user.user_profile # Fetch the profile associated with the current user
+    @user_profile = current_user.user_profile
+    if @user_profile.nil?
+      render json: { error: "Profile not found" }, status: :not_found
+    end
   end
+
 
   def user_profile_params
     params.require(:user_profile).permit(:profile_picture, :bio, :fitness_goals, :weight, :height, :age, :gender, :activity_level)

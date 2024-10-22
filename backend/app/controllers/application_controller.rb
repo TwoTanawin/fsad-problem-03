@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::API
+  before_action :authorize_request
+
   def authorize_request
     token = request.headers["Authorization"]&.split(" ")&.last
     Rails.logger.info("Raw Authorization header: #{request.headers['Authorization']}")
@@ -21,5 +23,10 @@ class ApplicationController < ActionController::API
       Rails.logger.error("User not found: #{e.message}")
       render json: { error: "User not found" }, status: :unauthorized
     end
+  end
+
+  # Define a helper to return the current user object for use in controllers
+  def current_user
+    @current_user
   end
 end

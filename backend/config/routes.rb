@@ -15,4 +15,5 @@ Rails.application.routes.draw do
   get "user_profiles", to: "user_profiles#show"
 
   resources :user_profiles, only: [ :index, :create, :show, :update, :destroy ]
+  # resources :user_profiles, only: [ :show, :create, :update, :destroy ]
 end

@@ -54,4 +54,13 @@ export class UserProfileService {
       catchError(err => throwError(err))
     );
   }
+
+  updateUserProfile(profileData: any): Observable<any> {
+    const token = localStorage.getItem('token');  // Assuming you store JWT in localStorage
+    const headers = new HttpHeaders()
+      .set('Authorization', `Bearer ${token}`)
+      .set('Content-Type', 'application/json');
+
+    return this.http.put(`${this.apiUrl}/${profileData.id}`, profileData, { headers });
+  }
 }
