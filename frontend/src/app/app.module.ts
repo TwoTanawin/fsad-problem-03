@@ -19,6 +19,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CreateProfileComponent } from './components/create-profile/create-profile.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,6 +42,7 @@ import { FooterComponent } from './components/footer/footer.component';
     MatButtonModule,
     MatInputModule,
     FormsModule,
+    HttpClientModule,
   ],
   providers: [
     provideAnimationsAsync()
