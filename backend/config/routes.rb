@@ -15,5 +15,18 @@ Rails.application.routes.draw do
   get "user_profiles", to: "user_profiles#show"
 
   resources :user_profiles, only: [ :index, :create, :show, :update, :destroy ]
-  # resources :user_profiles, only: [ :show, :create, :update, :destroy ]
+    # resources :user_profiles, only: [ :show, :create, :update, :destroy ]
+
+    # API routes for posts and related features
+    namespace :api do
+      namespace :v1 do
+        resources :posts, only: [ :index, :show, :create, :update, :destroy ] do
+          resources :comments, only: [ :create, :update, :destroy ]
+          post "like", to: "post_likes#create"
+          delete "unlike", to: "post_likes#destroy"
+          post "save", to: "saved_posts#create"
+          delete "unsave", to: "saved_posts#destroy"
+        end
+      end
+    end
 end
