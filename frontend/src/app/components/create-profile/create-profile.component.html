@@ -1,0 +1,139 @@
+<div class="max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-md">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-3xl font-bold text-gray-700">Profile</h2>
+      <button (click)="cancelEdit()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        Cancel
+      </button>
+    </div>
+  
+    <form (submit)="saveProfile()">
+      <div class="grid grid-cols-3 gap-8">
+        <!-- Profile Image Section -->
+        <div class="col-span-1 flex flex-col items-center">
+          <img
+            [src]="selectedImage || '/assets/images/brocode.png'"
+            alt="Profile Picture"
+            class="h-32 w-32 rounded-full object-cover mb-4"
+          />
+          <input type="file" (change)="onImageSelected($event)" class="text-sm" />
+        </div>
+  
+        <!-- Profile Details Section -->
+        <div class="col-span-2 grid grid-cols-2 gap-4">
+          <!-- Username Field -->
+          <div class="col-span-2">
+            <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+            <input
+              id="username"
+              type="text"
+              [(ngModel)]="profile.username"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+            />
+          </div>
+  
+          <!-- Bio Field -->
+          <div class="col-span-2">
+            <label for="bio" class="block text-sm font-medium text-gray-700">Bio</label>
+            <textarea
+              id="bio"
+              [(ngModel)]="profile.bio"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              rows="3"
+            ></textarea>
+          </div>
+  
+          <!-- Fitness Goals Field -->
+          <div class="col-span-2">
+            <label for="fitnessGoals" class="block text-sm font-medium text-gray-700">Fitness Goals</label>
+            <textarea
+              id="fitnessGoals"
+              [(ngModel)]="profile.fitnessGoals"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              rows="3"
+            ></textarea>
+          </div>
+  
+          <!-- Age Field -->
+          <div>
+            <label for="age" class="block text-sm font-medium text-gray-700">Age</label>
+            <input
+              id="age"
+              type="number"
+              [(ngModel)]="profile.age"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+            />
+          </div>
+  
+          <!-- Gender Field -->
+          <div>
+            <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+            <select
+              id="gender"
+              [(ngModel)]="profile.gender"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+  
+          <!-- Weight Field -->
+          <div>
+            <label for="weight" class="block text-sm font-medium text-gray-700">Weight (kg)</label>
+            <input
+              id="weight"
+              type="number"
+              [(ngModel)]="profile.weight"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+            />
+          </div>
+  
+          <!-- Height Field -->
+          <div>
+            <label for="height" class="block text-sm font-medium text-gray-700">Height (cm)</label>
+            <input
+              id="height"
+              type="number"
+              [(ngModel)]="profile.height"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+            />
+          </div>
+  
+          <!-- Email Field -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input
+              id="email"
+              type="email"
+              [(ngModel)]="profile.email"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+            />
+          </div>
+  
+          <!-- Phone Number Field -->
+          <div>
+            <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
+            <input
+              id="phoneNumber"
+              type="tel"
+              [(ngModel)]="profile.phoneNumber"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+            />
+          </div>
+        </div>
+      </div>
+  
+      <!-- Save Changes Button -->
+      <div class="flex justify-end mt-6">
+        <button
+          type="submit"
+          class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 focus:outline-none"
+        >
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+  

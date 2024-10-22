@@ -17,6 +17,7 @@ import { PostInteractionComponent } from './components/post-interaction/post-int
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
+import { CreateProfileComponent } from './components/create-profile/create-profile.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +28,8 @@ import { RegisterComponent } from './components/register/register.component';
     PostInteractionComponent,
     SignInComponent,
     ProfileComponent,
-    RegisterComponent
+    RegisterComponent,
+    CreateProfileComponent
   ],
   imports: [
     BrowserModule,

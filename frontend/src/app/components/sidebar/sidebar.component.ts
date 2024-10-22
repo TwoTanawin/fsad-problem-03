@@ -3,25 +3,72 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss'
+  styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent {
   navigation = [
-    { name: 'Dashboard', icon: 'home', href: '#', current: true },
-    { name: 'Team', icon: 'users', href: '#', current: false },
-    { name: 'Projects', icon: 'folder', href: '#', current: false },
-    { name: 'Calendar', icon: 'calendar', href: '#', current: false },
-    { name: 'Documents', icon: 'document', href: '#', current: false },
-    { name: 'Reports', icon: 'chart', href: '#', current: false },
+    { name: 'Home', icon: 'home', href: '/posts', current: true },
   ];
 
-  teams = [
-    { name: 'Heroicons', initial: 'H' },
-    { name: 'Tailwind Labs', initial: 'T' },
-    { name: 'Workcation', initial: 'W' },
+  topics = [
+    { name: 'Weight Training', initial: 'W' },
+    { name: 'Running', initial: 'R' },
+    { name: 'Protein', initial: 'P' },
   ];
+
+  newTopicName = ''; // Hold the new topic name
+  isEditing = false; // To track editing mode
+  editingTopicIndex: number | null = null; // To hold the index of the topic being edited
+  editingTopicName = ''; // To hold the new name while editing
+  showOptionsIndex: number | null = null; // <-- Declare this property to track which topic options are visible
 
   classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
+  }
+
+  // Add a new topic
+  addTopic() {
+    if (this.newTopicName.trim()) {
+      const newInitial = this.newTopicName.charAt(0).toUpperCase();
+      this.topics.push({ name: this.newTopicName, initial: newInitial });
+      this.newTopicName = ''; // Clear input after adding
+    }
+  }
+
+  // Delete a topic
+  deleteTopic(index: number) {
+    this.topics.splice(index, 1); // Remove the topic at the given index
+  }
+
+  // Enable edit mode for a topic
+  enableEditTopic(index: number) {
+    this.isEditing = true;
+    this.editingTopicIndex = index;
+    this.editingTopicName = this.topics[index].name; // Set current name in input
+    this.showOptionsIndex = null; // Close options after editing
+  }
+
+  // Save the edited topic
+  saveEditTopic() {
+    if (this.editingTopicName.trim() && this.editingTopicIndex !== null) {
+      const newInitial = this.editingTopicName.charAt(0).toUpperCase();
+      this.topics[this.editingTopicIndex] = { 
+        name: this.editingTopicName, 
+        initial: newInitial 
+      };
+      this.cancelEdit(); // Exit edit mode after saving
+    }
+  }
+
+  // Cancel editing
+  cancelEdit() {
+    this.isEditing = false;
+    this.editingTopicIndex = null;
+    this.editingTopicName = '';
+  }
+
+  // Toggle options display for a specific topic
+  toggleOptions(index: number) {
+    this.showOptionsIndex = this.showOptionsIndex === index ? null : index;
   }
 }
