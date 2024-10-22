@@ -12,15 +12,16 @@ export class ProfileComponent implements OnInit {
 
   // Declare profile data properties
   profilePicture: string = 'https://flowbite.com/application-ui/demo/images/users/jese-leos-2x.png'; 
-  username: string = '';  // Declare the username property
-  bio: string = '';       // Declare the bio property
-  fitnessGoals: string = ''; // Declare the fitnessGoals property
+  username: string = '';  
+  bio: string = '';       
+  fitnessGoals: string = ''; 
   weight: number = 0;
   height: number = 0;
   age: number = 0;
   gender: string = '';
-  email: string = '';      // Declare the email property
+  email: string = '';     
   phoneNumber: string = '';
+  activityLevel: string = '';  // Added activity level
 
   userId: number | null = null;  // Variable to store the userId
 
@@ -34,9 +35,9 @@ export class ProfileComponent implements OnInit {
     this.authService.getUserInfo().subscribe({
       next: (user) => {
         this.userId = user.id;
-        console.log('User ID:', this.userId);  // Debugging log to ensure userId is correct
-        this.username = user.username;  // Set the username from the backend
-        this.email = user.email;        // Set the email from the backend
+        console.log('User ID:', this.userId);  
+        this.username = user.username;  
+        this.email = user.email;       
       },
       error: (error) => {
         console.error('Error fetching user info:', error);
@@ -67,6 +68,7 @@ export class ProfileComponent implements OnInit {
     this.age = profileData.age || 0;
     this.gender = profileData.gender || '';
     this.phoneNumber = profileData.phone_number || '';
+    this.activityLevel = profileData.activity_level || '';  // Include activity level
   }
 
   // Method to decode Base64 image
@@ -82,7 +84,7 @@ export class ProfileComponent implements OnInit {
   // Method to save changes
   saveProfile() {
     this.isEditing = false;
-    // Here you would typically send the updated profile data to the backend API
-    console.log('Profile saved:', this.username, this.bio, this.fitnessGoals, this.weight, this.height, this.age, this.gender, this.email, this.phoneNumber);
+    // Send the updated profile data to the backend API
+    console.log('Profile saved:', this.username, this.bio, this.fitnessGoals, this.weight, this.height, this.age, this.gender, this.email, this.phoneNumber, this.activityLevel);
   }
 }
