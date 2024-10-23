@@ -4,9 +4,22 @@ class Api::V1::PostsController < ApplicationController
 
   # GET /api/v1/posts
   def index
-    @posts = Post.includes(:user, :comments, :post_likes).all
-    render json: @posts.to_json(include: { user: { only: [ :username ] }, comments: { include: :user }, post_likes: {} })
+    @posts = Post.includes(user: :user_profile, comments: :user, post_likes: {}).all
+    render json: @posts.to_json(
+      include: {
+        user: {
+          only: [ :username ],
+          include: {
+            user_profile: { only: [ :profile_picture ] }  # Fetch profile_picture from user_profile
+          }
+        },
+        comments: { include: :user },
+        post_likes: {}
+      }
+    )
   end
+
+
 
   # GET /api/v1/posts/:id
   def show

@@ -12,24 +12,12 @@
 
     <!-- Profile Details Section -->
     <div class="col-span-2 grid grid-cols-2 gap-4">
-      <!-- Username Field -->
-      <div class="col-span-2">
-        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-        <input
-          id="username"
-          type="text"
-          name="username"  
-          [(ngModel)]="profile.username"
-          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-        />
-      </div>
-
       <!-- Bio Field -->
       <div class="col-span-2">
         <label for="bio" class="block text-sm font-medium text-gray-700">Bio</label>
         <textarea
           id="bio"
-          name="bio" 
+          name="bio"
           [(ngModel)]="profile.bio"
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
           rows="3"
@@ -41,7 +29,7 @@
         <label for="fitnessGoals" class="block text-sm font-medium text-gray-700">Fitness Goals</label>
         <textarea
           id="fitnessGoals"
-          name="fitnessGoals" 
+          name="fitnessGoals"
           [(ngModel)]="profile.fitnessGoals"
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
           rows="3"
@@ -54,7 +42,7 @@
         <input
           id="age"
           type="number"
-          name="age" 
+          name="age"
           [(ngModel)]="profile.age"
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
         />
@@ -65,7 +53,7 @@
         <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
         <select
           id="gender"
-          name="gender"  
+          name="gender"
           [(ngModel)]="profile.gender"
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
         >
@@ -82,7 +70,7 @@
         <input
           id="weight"
           type="number"
-          name="weight" 
+          name="weight"
           [(ngModel)]="profile.weight"
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
         />
@@ -94,8 +82,20 @@
         <input
           id="height"
           type="number"
-          name="height" 
+          name="height"
           [(ngModel)]="profile.height"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+        />
+      </div>
+
+      <!-- Activity Level Field -->
+      <div class="col-span-2">
+        <label for="activityLevel" class="block text-sm font-medium text-gray-700">Activity Level</label>
+        <input
+          id="activityLevel"
+          type="text"
+          name="activityLevel"
+          [(ngModel)]="profile.activityLevel"
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
         />
       </div>
@@ -106,20 +106,8 @@
         <input
           id="email"
           type="email"
-          name="email" 
+          name="email"
           [(ngModel)]="profile.email"
-          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-        />
-      </div>
-
-      <!-- Phone Number Field -->
-      <div>
-        <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
-        <input
-          id="phoneNumber"
-          type="tel"
-          name="phoneNumber" 
-          [(ngModel)]="profile.phoneNumber"
           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
         />
       </div>

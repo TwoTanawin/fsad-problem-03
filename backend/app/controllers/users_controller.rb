@@ -1,15 +1,15 @@
 class UsersController < ApplicationController
-    # POST /register
-    def register
-      user = User.new(user_params)
+  # POST /register
+  def register
+    user = User.new(user_params)
 
-      if user.save
-        token = encode_token({ user_id: user.id })  # Generate JWT token with user ID
-        render json: { user: user, token: token }, status: :created
-      else
-        render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
-      end
+    if user.save
+      token = encode_token({ user_id: user.id })  # Generate JWT token with user ID
+      render json: { user: user, token: token }, status: :created
+    else
+      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end
+  end
 
   # POST /login
   def login
@@ -23,14 +23,14 @@ class UsersController < ApplicationController
     end
   end
 
-    private
+  private
 
-    def user_params
-      params.require(:user).permit(:username, :email, :password, :password_confirmation)
-    end
+  def user_params
+    params.require(:user).permit(:username, :email, :password, :password_confirmation)
+  end
 
-    # Method to encode a JWT token
-    def encode_token(payload)
-      JWT.encode(payload, Rails.application.secrets.secret_key_base)
-    end
+  # Method to encode a JWT token
+  def encode_token(payload)
+    JWT.encode(payload, ENV["JWT_SECRET_KEY"])
+  end
 end

@@ -11,7 +11,8 @@ class ApplicationController < ActionController::API
     end
 
     begin
-      decoded_token = JWT.decode(token, Rails.application.credentials[:jwt_secret_key], true, { algorithm: "HS256" })[0]
+      # Use the secret from the .env file
+      decoded_token = JWT.decode(token, ENV["JWT_SECRET_KEY"], true, { algorithm: "HS256" })[0]
       Rails.logger.info("Successfully decoded token: #{decoded_token}")
       @current_user = User.find(decoded_token["user_id"])
     rescue JWT::ExpiredSignature

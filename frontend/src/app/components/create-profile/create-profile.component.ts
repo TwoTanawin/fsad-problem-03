@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserProfileService } from '../../services/user-profile.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/authentication.service';  // Updated import path
+import { AuthService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-create-profile',
@@ -9,35 +9,33 @@ import { AuthService } from '../../services/authentication.service';  // Updated
   styleUrls: ['./create-profile.component.scss']
 })
 export class CreateProfileComponent implements OnInit {
-  selectedImage: string | ArrayBuffer | null = null;
+  selectedImage: string | ArrayBuffer | null = null;  // For image upload and Base64 conversion
 
+  // Profile model aligned with the Rails migration
   profile = {
-    username: '',
     bio: '',
     fitnessGoals: '',
     age: null,
     gender: '',
     weight: null,
     height: null,
+    activityLevel: '',  // Added activity level field
     email: '',
-    phoneNumber: '',
-    activityLevel: ''  // Add the missing field
   };
 
-  userId: number | null = null;  // Variable to store the userId
+  userId: number | null = null;  // To store the userId from the authentication service
 
   constructor(
     private userProfileService: UserProfileService,
-    private authService: AuthService,  // Use the updated AuthService
+    private authService: AuthService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    // Fetch user info to prefill some profile fields like username and email
     this.authService.getUserInfo().subscribe({
       next: (user) => {
         this.userId = user.id;
-        console.log('User ID:', this.userId);  // Debugging log to ensure userId is correct
-        this.profile.username = user.username;
         this.profile.email = user.email;
       },
       error: (error) => {
@@ -46,7 +44,6 @@ export class CreateProfileComponent implements OnInit {
       }
     });
   }
-  
 
   // Method to handle image selection and Base64 encoding
   onImageSelected(event: any) {
@@ -54,47 +51,51 @@ export class CreateProfileComponent implements OnInit {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.selectedImage = e.target.result;  // This should give the Base64 string
-        console.log('Selected Image:', this.selectedImage);  // Debugging log
+        this.selectedImage = e.target.result;  // Base64 encoded image
+        console.log('Selected Image (Base64):', this.selectedImage);
       };
-      reader.readAsDataURL(file);  // Converts the file to Base64
+      reader.readAsDataURL(file);
     }
   }
 
   saveProfile() {
-    console.log('Current profile data:', this.profile);
-  
-    if (!this.profile.username || !this.profile.email || this.profile.age == null ||
-        this.profile.weight == null || this.profile.height == null || !this.profile.gender) {
+    if (!this.profile.email || this.profile.age === null || 
+        this.profile.weight === null || this.profile.height === null || 
+        !this.profile.gender) {
       alert('Please fill in all required fields.');
       return;
     }
   
+    // Convert gender to lowercase to match Rails validation
+    this.profile.gender = this.profile.gender.toLowerCase(); 
+  
+    // Prepare profile data consistent with the Rails model
     const profileData = {
       ...this.profile,
-      user_id: this.userId,  // Ensure userId is correctly set
-      profile_picture: this.selectedImage || '/assets/images/brocode.png',
-      gender: this.profile.gender.toLowerCase(),
-      activity_level: this.profile.activityLevel || 'default'
+      user_id: this.userId,
+      profile_picture: this.selectedImage || '/assets/images/brocode.png',  // Default image if none is selected
+      activity_level: this.profile.activityLevel || 'default',  // Default activity level if none is provided
     };
   
-    console.log('Profile Data being sent:', profileData);  // Log to ensure user_id is present
+    console.log('Profile data being sent:', profileData);
+
+    console.log('Selected Image (Base64):', this.selectedImage);  // Ensure this is a complete and valid Base64 string
   
+    // Make API call to save the profile
     this.userProfileService.createUserProfile(profileData).subscribe({
       next: (response: any) => {
         console.log('Profile created successfully:', response);
-        this.router.navigate(['/posts']);
+        this.router.navigate(['/posts']);  // Navigate to posts page after successful profile creation
       },
       error: (error: any) => {
         console.error('Error creating profile:', error);
-        alert(`Failed to create profile: ${error.error.message || 'Unknown error'}`);
+        alert('Failed to create profile: ' + (error.error.message || 'Unknown error'));
       }
     });
   }
   
 
   cancelEdit() {
-    this.router.navigate(['/posts']);
+    this.router.navigate(['/posts']);  // Navigate back to posts without saving
   }
 }
-

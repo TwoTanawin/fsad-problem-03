@@ -37,7 +37,7 @@ class AuthenticationController < ApplicationController
   private
 
   def encode_token(payload)
-    JWT.encode(payload, Rails.application.credentials.jwt_secret_key)
+    JWT.encode(payload, ENV["JWT_SECRET_KEY"])
   end
 
 
@@ -56,7 +56,7 @@ class AuthenticationController < ApplicationController
     end
 
     begin
-      decoded_token = JWT.decode(token, Rails.application.credentials[:jwt_secret_key], true, { algorithm: "HS256" })[0]
+      decoded_token = JWT.decode(token, ENV["JWT_SECRET_KEY"], true, { algorithm: "HS256" })[0]
       Rails.logger.info("Successfully decoded token: #{decoded_token}")
       @current_user = User.find(decoded_token["user_id"])
     rescue JWT::DecodeError => e
